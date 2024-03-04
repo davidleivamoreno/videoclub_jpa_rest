@@ -9,5 +9,4 @@ class VideoclubApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

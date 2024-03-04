@@ -59,7 +59,7 @@ public class Pelicula {
     @ManyToMany
     @JoinTable(
             name = "pelicula_categoria",
-            joinColumns = @JoinColumn(name = "id_pelicula", referencedColumnName = "id_pelicula"),
+            joinColumns = @JoinColumn(name = "iwd_pelicula", referencedColumnName = "id_pelicula"),
             inverseJoinColumns = @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria"))
     Set<Categoria> categorias = new HashSet<>();
 
