@@ -6,14 +6,16 @@ import org.iesvdm.videoclub.domain.Pelicula;
 import org.iesvdm.videoclub.service.CategoriaService;
 import org.iesvdm.videoclub.service.PeliculaService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/categorias")
 public class CategoriaController {
     private final CategoriaService categoriaService;
@@ -22,18 +24,24 @@ public class CategoriaController {
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping(value={"","/"},params={"!buscar","!ordenar"})
+    @GetMapping(value={"","/"},params={"!buscar","!ordenar","!pagina","!tamanio"})
     public List<Categoria> all() {
         log.info("Accediendo a todas las categorias");
         return this.categoriaService.all();
     }
 
-    @GetMapping({"","/"})
+    @GetMapping(value = {"","/"})
+    public ResponseEntity<Map<String,Object>> all(@RequestParam(value="pagina",defaultValue = "0") int pagina, @RequestParam(value = "tamanio",defaultValue = "3") int tamanio){
+        log.info("Accediendo a todas las peliculas con paginacion");
+        Map<String,Object> responseAll =this.categoriaService.all(pagina,tamanio);
+        return ResponseEntity.ok(responseAll);
+    }
+
+    @GetMapping(value={"","/"}, params={"!pagina","!tamanio"})
     public List<Categoria> all(@RequestParam("buscar") Optional<String> buscarOptional,@RequestParam("ordenar") Optional<String> ordenarOptional) {
         log.info("Accediendo a todas las categorias",
         buscarOptional.orElse("VOID"),
         ordenarOptional.orElse("VOID"));
-
         return this.categoriaService.allByQueryFilterStream(buscarOptional,ordenarOptional);
     }
 

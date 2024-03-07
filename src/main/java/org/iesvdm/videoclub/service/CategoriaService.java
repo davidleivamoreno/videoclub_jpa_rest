@@ -1,15 +1,18 @@
 package org.iesvdm.videoclub.service;
 
 import org.iesvdm.videoclub.domain.Categoria;
+import org.iesvdm.videoclub.domain.Pelicula;
 import org.iesvdm.videoclub.exception.CategoriaNotFound;
 import org.iesvdm.videoclub.repository.CategoriaCustomRepository;
 import org.iesvdm.videoclub.repository.CategoriaCustomRepositoryJPQLImpl;
 import org.iesvdm.videoclub.repository.CategoriaRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,6 +47,16 @@ public class CategoriaService {
                         this.categoriaRepository.save(categoria) : null))
                 .orElseThrow(() -> new CategoriaNotFound(id));
 
+    }
+    public Map<String,Object> all(int pagina, int tamanio){
+        Pageable paginado =PageRequest.of(pagina,tamanio,Sort.by("id").ascending());
+        Page<Categoria> pageAll =this.categoriaRepository.findAll(paginado);
+        Map<String,Object> response =new HashMap<>();
+        response.put("categorias",pageAll.getContent());
+        response.put("currentPage",pageAll.getNumber());
+        response.put("totalItems",pageAll.getTotalElements());
+        response.put("totalPages",pageAll.getTotalPages());
+        return response;
     }
 
     public void delete(Long id) {
