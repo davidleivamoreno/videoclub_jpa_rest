@@ -21,10 +21,10 @@ public class CategoriaCustomRepositoryJPQLImpl implements CategoriaCustomReposit
         queryBuilder.append(" ").append("WHERE C.nombre like :nombre");
         }
         if(ordenarOptional.isPresent()){
-            if(buscarOptional.isPresent() && "asc".equalsIgnoreCase(buscarOptional.get())){
+            if(ordenarOptional.isPresent() && "asc".equalsIgnoreCase(ordenarOptional.get())){
                 queryBuilder.append(" ").append(" ORDER BY  C.nombre ASC");
 
-            }else if(buscarOptional.isPresent() && "desc".equalsIgnoreCase(buscarOptional.get())){
+            }else if(ordenarOptional.isPresent() && "desc".equalsIgnoreCase(ordenarOptional.get())){
                 queryBuilder.append(" ").append(" ORDER BY  C.nombre DESC");
 
             }
@@ -33,6 +33,7 @@ public class CategoriaCustomRepositoryJPQLImpl implements CategoriaCustomReposit
         if(buscarOptional.isPresent()){
             query.setParameter("nombre","%"+buscarOptional.get()+"%");
         }
+
         return query.getResultList();
     }
 }

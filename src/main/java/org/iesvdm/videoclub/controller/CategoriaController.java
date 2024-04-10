@@ -31,7 +31,7 @@ public class CategoriaController {
     }
 
     @GetMapping(value = {"","/"})
-    public ResponseEntity<Map<String,Object>> all(@RequestParam(value="pagina",defaultValue = "0") int pagina, @RequestParam(value = "tamanio",defaultValue = "3") int tamanio){
+    public ResponseEntity<Map<String,Object>> all(@RequestParam(value="pagina",defaultValue = "0") int pagina, @RequestParam(value = "tamanio",defaultValue = "1") int tamanio){
         log.info("Accediendo a todas las peliculas con paginacion");
         Map<String,Object> responseAll =this.categoriaService.all(pagina,tamanio);
         return ResponseEntity.ok(responseAll);
@@ -67,5 +67,6 @@ public class CategoriaController {
     public void deleteCategoria(@PathVariable("id") Long id) {
         this.categoriaService.delete(id);
     }
+
 
 }

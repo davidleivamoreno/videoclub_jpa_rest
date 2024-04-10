@@ -9,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PeliculaService {
@@ -36,6 +34,7 @@ public class PeliculaService {
         return response;
     }
 
+
     public Pelicula save(Pelicula pelicula) {
         return this.peliculaRepository.save(pelicula);
     }
@@ -52,11 +51,24 @@ public class PeliculaService {
                 .orElseThrow(() -> new PeliculaNotFoundException(id));
 
     }
+    public List<Pelicula> all(String[]orden){
+        List<Pelicula> listOrd=new ArrayList<>();
+        String parametro =orden[0];
+        String valorden=orden[1];
+        String campo = orden[0].split(",")[0];
+        String sentido = orden[0].split(",")[1];
+        Sort.Direction direccion = sentido.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direccion, campo);
+
+        return this.peliculaRepository.findAll(sort);
+
+    }
 
     public void delete(Long id) {
         this.peliculaRepository.findById(id).map(p -> {this.peliculaRepository.delete(p);
                                                         return p;})
                 .orElseThrow(() -> new PeliculaNotFoundException(id));
     }
+
 
 }
