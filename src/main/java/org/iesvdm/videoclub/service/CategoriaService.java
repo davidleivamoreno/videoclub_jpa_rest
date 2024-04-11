@@ -12,10 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CategoriaService {
@@ -38,6 +35,64 @@ public class CategoriaService {
     public Categoria one(Long id) {
         return this.categoriaRepository.findById(id)
                 .orElseThrow(() -> new CategoriaNotFound(id));
+    }
+    public List<Categoria> allOrderedBy(String campoOrden, String orden) {
+        List<Categoria> categorias = all();
+
+
+        Comparator<Categoria> comparator = (c1, c2) -> {
+            switch (campoOrden) {
+                case "nombre":
+                    return c1.getNombre().compareTo(c2.getNombre());
+                case "id":
+                    return Long.compare(c1.getId(),c2.getId());
+                default:
+                    return 0;
+            }
+        };
+
+        // Si el tipo de orden es descendente, invertimos el Comparator
+        if (orden.equals("desc")) {
+            comparator = comparator.reversed();
+        }
+
+        // Ordenamos la lista de categorías utilizando el Comparator
+        Collections.sort(categorias, comparator);
+
+        return categorias;
+    }
+    public List<Categoria> allOrderedByVarios(String[] camposOrden, String[] ordenes) {
+        List<Categoria> categorias = all();
+
+        Comparator<Categoria> comparator = (c1, c2) -> {
+            for (int i = 0; i < camposOrden.length; i++) {
+                String campoOrden = camposOrden[i];
+                String orden = ordenes[i];
+                int comparacion;
+
+                switch (campoOrden) {
+                    case "nombre":
+                        comparacion = c1.getNombre().compareTo(c2.getNombre());
+                        break;
+                    case "id":
+                        comparacion = Long.compare(c1.getId(), c2.getId());
+                        break;
+                    default:
+                        comparacion = 0;
+                        break;
+                }
+
+                if (comparacion != 0) {
+                    return orden.equals("asc") ? comparacion : -comparacion;
+                }
+            }
+            return 0;
+        };
+
+
+        Collections.sort(categorias, comparator);
+
+        return categorias;
     }
 
 

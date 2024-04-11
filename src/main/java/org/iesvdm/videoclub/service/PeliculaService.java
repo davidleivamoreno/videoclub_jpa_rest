@@ -1,5 +1,6 @@
 package org.iesvdm.videoclub.service;
 
+import org.iesvdm.videoclub.domain.Categoria;
 import org.iesvdm.videoclub.domain.Pelicula;
 import org.iesvdm.videoclub.exception.PeliculaNotFoundException;
 import org.iesvdm.videoclub.repository.PeliculaRepository;
@@ -71,4 +72,69 @@ public class PeliculaService {
     }
 
 
+
+    public List<Pelicula> allOrderedBy(String campoOrden, String orden) {
+        List<Pelicula> categorias = all();
+
+
+        Comparator<Pelicula> comparator = (p1, p2) -> {
+            switch (campoOrden) {
+                case "titulo":
+                    return p1.getTitulo().compareTo(p2.getTitulo());
+                case "idPelicula":
+                    return Long.compare(p1.getIdPelicula(),p2.getIdPelicula());
+                case "descripcion":
+                    return p1.getTitulo().compareTo(p2.getTitulo());
+                default:
+                    return 0;
+            }
+        };
+
+        // Si el tipo de orden es descendente, invertimos el Comparator
+        if (orden.equals("desc")) {
+            comparator = comparator.reversed();
+        }
+
+        // Ordenamos la lista de categorías utilizando el Comparator
+        Collections.sort(categorias, comparator);
+
+        return categorias;
+    }
+
+    public List<Pelicula> allOrderedByVarios(String[] camposOrden, String[] ordenes) {
+        List<Pelicula> peliculas = all();
+
+        Comparator<Pelicula> comparator = (p1, p2) -> {
+            for (int i = 0; i < camposOrden.length; i++) {
+                String campoOrden = camposOrden[i];
+                String orden = ordenes[i];
+                int comparacion;
+
+                switch (campoOrden) {
+                    case "titulo":
+                        comparacion = p1.getTitulo().compareTo(p2.getTitulo());
+                        break;
+                    case "idPelicula":
+                        comparacion = Long.compare(p1.getIdPelicula(), p2.getIdPelicula());
+                        break;
+                    case "descripcion":
+                        comparacion = p1.getDescripcion().compareTo(p2.getDescripcion());
+                        break;
+                    default:
+                        comparacion = 0;
+                        break;
+                }
+
+                if (comparacion != 0) {
+                    return orden.equals("asc") ? comparacion : -comparacion;
+                }
+            }
+            return 0;
+        };
+
+
+        Collections.sort(peliculas, comparator);
+
+        return peliculas;
+    }
 }

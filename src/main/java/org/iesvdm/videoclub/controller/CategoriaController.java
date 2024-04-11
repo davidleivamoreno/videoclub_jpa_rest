@@ -29,6 +29,27 @@ public class CategoriaController {
         log.info("Accediendo a todas las categorias");
         return this.categoriaService.all();
     }
+//    @GetMapping("/all")
+//    public List<Categoria> filtrar(
+//            @RequestParam(value = "ordenarPor", required = false) String campoOrden,
+//            @RequestParam(value = "orden", defaultValue = "asc") String orden) {
+//        if (campoOrden != null) {
+//            return this.categoriaService.allOrderedBy(campoOrden, orden);
+//        } else {
+//            return this.categoriaService.all();
+//        }
+//    }
+//    @GetMapping("/all")
+//    public List<Categoria> filtrarVarios(
+//            @RequestParam(value = "ordenarPor", required = false) String[] camposOrden,
+//            @RequestParam(value = "orden", defaultValue = "asc") String[] ordenes) {
+//        if (camposOrden != null && camposOrden.length > 0) {
+//            return this.categoriaService.allOrderedByVarios(camposOrden, ordenes);
+//        } else {
+//            return this.categoriaService.all();
+//        }
+//    }
+
 
     @GetMapping(value = {"","/"})
     public ResponseEntity<Map<String,Object>> all(@RequestParam(value="pagina",defaultValue = "0") int pagina, @RequestParam(value = "tamanio",defaultValue = "1") int tamanio){

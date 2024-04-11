@@ -37,6 +37,26 @@ public class PeliculaController {
 
         return this.peliculaService.all(orden);
     }
+//    @GetMapping("/all")
+//    public List<Pelicula> filtrar(
+//            @RequestParam(value = "ordenarPor", required = false) String campoOrden,
+//            @RequestParam(value = "orden", defaultValue = "asc") String orden) {
+//        if (campoOrden != null) {
+//            return this.peliculaService.allOrderedBy(campoOrden, orden);
+//        } else {
+//            return this.peliculaService.all();
+//        }
+//    }
+        @GetMapping("/all")
+    public List<Pelicula> filtrarVarios(
+            @RequestParam(value = "ordenarPor", required = false) String[] camposOrden,
+            @RequestParam(value = "orden", defaultValue = "asc") String[] ordenes) {
+        if (camposOrden != null && camposOrden.length > 0) {
+            return this.peliculaService.allOrderedByVarios(camposOrden, ordenes);
+        } else {
+            return this.peliculaService.all();
+        }
+    }
 
     @PostMapping({"","/"})
     public Pelicula newPelicula(@RequestBody Pelicula pelicula) {
